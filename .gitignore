@@ -10,5 +10,5 @@
 CMakeCache.txt
 cmake_install.cmake
 CMakeFiles
-.vscode-tags
+.vscode-ctags
 .vscode/
