@@ -1,0 +1,22 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/home/wheatfox/Documents/Code/ncnn-yolov5-loongarch/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	//
+MAX_STRIDE	ncnn-yolov5.cpp	/^#define MAX_STRIDE /;"	d	file:
+Object	ncnn-yolov5.cpp	/^struct Object$/;"	s	file:
+clamp	ncnn-yolov5.cpp	/^static float clamp($/;"	f	typeref:typename:float	file:
+detect_yolov5	ncnn-yolov5.cpp	/^static int detect_yolov5(const cv::Mat& bgr, std::vector<Object>& objects)$/;"	f	typeref:typename:int	file:
+draw_objects	ncnn-yolov5.cpp	/^static void draw_objects(const cv::Mat& bgr, const std::vector<Object>& objects)$/;"	f	typeref:typename:void	file:
+generate_proposals	ncnn-yolov5.cpp	/^static void generate_proposals($/;"	f	typeref:typename:void	file:
+label	ncnn-yolov5.cpp	/^	int label;$/;"	m	struct:Object	typeref:typename:int	file:
+main	ncnn-yolov5.cpp	/^int main(int argc, char** argv)$/;"	f	typeref:typename:int
+non_max_suppression	ncnn-yolov5.cpp	/^static void non_max_suppression($/;"	f	typeref:typename:void	file:
+prob	ncnn-yolov5.cpp	/^	float prob;$/;"	m	struct:Object	typeref:typename:float	file:
+rect	ncnn-yolov5.cpp	/^	cv::Rect_<float> rect;$/;"	m	struct:Object	typeref:typename:cv::Rect_<float>	file:
