@@ -36,11 +36,33 @@ CXX = $(CROSS_COMPILE)g++
 AR = $(CROSS_COMPILE)ar
 LD = $(CROSS_COMPILE)ld
 STRIP = $(CROSS_COMPILE)strip
+OBJDUMP = $(CROSS_COMPILE)objdump
+READELF = $(CROSS_COMPILE)readelf
 
-.PNONY: all clean
+.PHONY: all clean
 all:
-# with openmp and static compile
-	$(CXX) -o loongarch64-yolov5 main.cpp $(INCLUDES) $(LIB_PATH) $(LIBS) -fopenmp -static
+# with openmp and static compile, using lsx only!
+	$(CXX) -o loongarch64-yolov5 main.cpp $(INCLUDES) $(LIB_PATH) $(LIBS) -fopenmp -static -msimd=lsx
 
 clean:
 	rm -rf loongarch64-yolov5
+
+.PHONY: run
+run:
+	qemu-loongarch64 loongarch64-yolov5 fox.png
+
+.PHONY: disa
+disa:
+	$(OBJDUMP) -d loongarch64-yolov5 > loongarch64-yolov5.S
+	$(READELF) -a loongarch64-yolov5 > loongarch64-yolov5.readelf.txt
+
+.PHONY: debug
+debug:
+	loongarch64-linux-gnu-gdb \
+		-ex "file loongarch64-yolov5" \
+		-ex "b _start" \
+		-ex "target remote localhost:1234" \
+
+.PHONY: killport
+killport:
+	-kill -9 `lsof -t -i:1234`

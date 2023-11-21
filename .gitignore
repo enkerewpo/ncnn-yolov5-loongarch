@@ -12,3 +12,7 @@ cmake_install.cmake
 CMakeFiles
 .vscode-ctags
 .vscode/
+
+# too big file
+loongarch64-yolov5.S
+qemu.log

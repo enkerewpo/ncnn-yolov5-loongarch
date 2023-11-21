@@ -1,6 +1,6 @@
 # for opencv
 mkdir build
-cd build
+cd build    
 cmake .. \
     -DCMAKE_TOOLCHAIN_FILE=../../Code/ncnn-yolov5-loongarch/loongarch64-toolchain.cmake \
     -DOPENCV_FORCE_3RDPARTY_BUILD=ON \
@@ -11,6 +11,8 @@ cmake .. \
     -DBUILD_SHARED_LIBS=OFF \
     -DCMAKE_BUILD_TYPE=RELEASE \
     -DCMAKE_INSTALL_PREFIX=./opencv_install
+
+# -msimd=lsx !!! don't use lasx extension when compiling !!! cannot run on QEMU and 2K1000 board now!!!
 
 # for ncnn
 git reset --hard 465debe9bbfedcd68c57b84d75f75014f31db904 # for success build on loongarch64
