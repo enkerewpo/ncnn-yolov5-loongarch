@@ -137,9 +137,10 @@ static void non_max_suppression(std::vector<Object> &proposals,
 }
 
 static int detect_yolov5(const cv::Mat &bgr, std::vector<Object> &objects) {
+  printf("detect_yolov5\n");
   ncnn::Net yolov5;
 
-  yolov5.opt.use_vulkan_compute = true;
+  yolov5.opt.use_vulkan_compute = false;
   // yolov5.opt.use_bf16_storage = true;
 
   // original pretrained model from https://github.com/ultralytics/yolov5
@@ -148,6 +149,8 @@ static int detect_yolov5(const cv::Mat &bgr, std::vector<Object> &objects) {
     exit(-1);
   if (yolov5.load_model("yolov5s.ncnn.bin"))
     exit(-1);
+
+  printf("load yolov5s model success\n");
 
   const int target_size = 640;
   const float prob_threshold = 0.25f;
@@ -198,6 +201,7 @@ static int detect_yolov5(const cv::Mat &bgr, std::vector<Object> &objects) {
 
   // anchor setting from yolov5/models/yolov5s.yaml
 
+  printf("stride 8\n");
   // stride 8
   {
     ncnn::Mat out;
@@ -217,6 +221,7 @@ static int detect_yolov5(const cv::Mat &bgr, std::vector<Object> &objects) {
     proposals.insert(proposals.end(), objects8.begin(), objects8.end());
   }
 
+  printf("stride 16\n");
   // stride 16
   {
     ncnn::Mat out;
@@ -237,6 +242,7 @@ static int detect_yolov5(const cv::Mat &bgr, std::vector<Object> &objects) {
     proposals.insert(proposals.end(), objects16.begin(), objects16.end());
   }
 
+  printf("stride 32\n");
   // stride 32
   {
     ncnn::Mat out;
@@ -259,6 +265,7 @@ static int detect_yolov5(const cv::Mat &bgr, std::vector<Object> &objects) {
 
   non_max_suppression(proposals, objects, img_h, img_w, hpad / 2, wpad / 2,
                       scale, scale, prob_threshold, nms_threshold);
+  printf("detect_yolov5 done\n");
   return 0;
 }
 
@@ -327,8 +334,11 @@ static void draw_objects(const cv::Mat &bgr,
                 cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 0));
   }
 
-  cv::imshow("image", image);
-  cv::waitKey(0);
+  // cv::imshow("image", image);
+  // output result to the file
+  std::string out_name = "yolov5.jpg";
+  cv::imwrite(out_name, image);
+  printf("save result to %s\n", out_name.c_str());
 }
 
 int main(int argc, char **argv) {

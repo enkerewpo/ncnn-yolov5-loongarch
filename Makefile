@@ -48,16 +48,16 @@ clean:
 	rm -rf loongarch64-yolov5
 
 .PHONY: run
-run:
+run: all
 	qemu-loongarch64 loongarch64-yolov5 fox.png
 
 .PHONY: disa
-disa:
+disa: all
 	$(OBJDUMP) -d loongarch64-yolov5 > loongarch64-yolov5.S
 	$(READELF) -a loongarch64-yolov5 > loongarch64-yolov5.readelf.txt
 
 .PHONY: debug
-debug:
+debug: all
 	loongarch64-linux-gnu-gdb \
 		-ex "file loongarch64-yolov5" \
 		-ex "b _start" \
