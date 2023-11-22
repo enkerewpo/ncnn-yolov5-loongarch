@@ -42,7 +42,7 @@ READELF = $(CROSS_COMPILE)readelf
 .PHONY: all clean
 all:
 # with openmp and static compile, using lsx only!
-	$(CXX) -o loongarch64-yolov5 main.cpp $(INCLUDES) $(LIB_PATH) $(LIBS) -fopenmp -static -msimd=lsx
+	$(CXX) -o loongarch64-yolov5 main.cpp $(INCLUDES) $(LIB_PATH) $(LIBS) -fopenmp -static -msimd=lsx -g
 
 clean:
 	rm -rf loongarch64-yolov5
