@@ -49,7 +49,7 @@ clean:
 
 .PHONY: run
 run: all
-	qemu-loongarch64 loongarch64-yolov5 fox.png
+	qemu-loongarch64 loongarch64-yolov5 bears.jpg
 
 .PHONY: disa
 disa: all
