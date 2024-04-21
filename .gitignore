@@ -16,3 +16,7 @@ CMakeFiles
 # too big file
 loongarch64-yolov5.S
 qemu.log
+loongarch64-yolov5
+loongarch64-yolov5.readelf.txt
+yolov5.jpg
+build
