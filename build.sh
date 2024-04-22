@@ -3,3 +3,4 @@ mkdir build
 cd build
 cmake .. -DCMAKE_TOOLCHAIN_FILE=../loongarch64-toolchain.cmake
 make
+cp ../yolov5s.ncnn* .# change 
