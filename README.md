@@ -11,7 +11,8 @@ run build.sh to build
 ## user case design
 
 1. wildlife recognition using yolov5
-2. 1 UAV, 2 cams(normal color cam and )
+2. 1 UAV, 2 cams(normal color cam and IR cam)
+3. 
 
 wheatfox
 2023 - 2024
