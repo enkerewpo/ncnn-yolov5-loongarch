@@ -3,9 +3,13 @@ project(is2ros-user)
 set(CMAKE_CXX_STANDARD 14)
 
 set(SOURCE_FILES
-    ./is2ros/src/test_main.cpp
     ./is2ros/src/core.cpp
     ./is2ros/src/kgraph.cpp
+    ./is2ros/src/task.cpp
+    ./is2ros/src/capability.cpp
+    ./is2ros/src/simulate.cpp
+    ./is2ros/src/loguru.cpp
+    ./is2ros/src/test_main.cpp
 )
 
 # set gcc compile flags

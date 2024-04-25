@@ -10,7 +10,10 @@ void kgraph_init() {
   root_node->cap = nullptr;
   root_node->parent = nullptr;
   root_node->children.clear();
-  std::cout << "KGraph initialized, root node created" << std::endl;
+  // std::cout << "KGraph initialized, root node created" << std::endl;
+  LOG_F(INFO, "KGraph initialized, root node created");
 }
+
+std::shared_ptr<KGraphNode> get_root_node() { return root_node; }
 
 }
