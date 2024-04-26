@@ -18,7 +18,15 @@ public:
   }
 };
 
+struct TaskResult {
+  int task_id;
+  std::string result;
+  std::vector<std::string> img_paths; // corresponding to the device_ids
+  std::vector<int> device_ids;
+};
+
 std::vector<std::shared_ptr<Task>> get_tasks();
 void add_task(std::shared_ptr<Task> task);
+TaskResult run(int task_id);
 
 } // namespace iS2ROS

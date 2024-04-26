@@ -58,17 +58,14 @@ int main(int argc, char **argv) {
 
   LOG_F(INFO, "Finished adding Knowledge Graph nodes");
 
-  LOG_F(INFO, "Adding user tasks...");
+  while (1) {
+    iS2ROS::add_task(std::make_shared<iS2ROS::Task>(1, "Image", 75.0));
+    auto result = iS2ROS::run(1);
+    if (result.result == "success") {
+      LOG_F(INFO, "Task %d succeeded", result.task_id);
+      break;
+    }
+  }
 
-  iS2ROS::add_task(std::make_shared<iS2ROS::Task>(1, "Image", 75.0));
-
-  LOG_F(INFO, "Finished adding user tasks");
-
-  LOG_F(INFO, "Waiting for each task to be completed and retrieving the result "
-              "image...");
-
-  iS2ROS::get_env()->t.join();
-
-  LOG_F(INFO, "Finished! Now shutting down iS2ROS framework...");
   return 0;
 }

@@ -10,6 +10,8 @@ set(SOURCE_FILES
     ./is2ros/src/simulate.cpp
     ./is2ros/src/loguru.cpp
     ./is2ros/src/test_main.cpp
+    ./is2ros/src/access.cpp
+    ./is2ros/src/match.cpp
 )
 
 # set gcc compile flags
