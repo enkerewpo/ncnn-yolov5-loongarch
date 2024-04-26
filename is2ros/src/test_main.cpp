@@ -63,8 +63,9 @@ int main(int argc, char **argv) {
     auto result = iS2ROS::run(1);
     if (result.result == "success") {
       LOG_F(INFO, "Task %d succeeded", result.task_id);
-      break;
     }
+    // sleep 2s
+    std::this_thread::sleep_for(std::chrono::seconds(2));
   }
 
   return 0;
