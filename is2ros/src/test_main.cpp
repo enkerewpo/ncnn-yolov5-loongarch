@@ -8,8 +8,9 @@
 #include <chrono>
 #include <map>
 
-std::map<std::shared_ptr<iS2ROS::Device>, std::shared_ptr<iS2ROS::Capability>>
-    device_to_cap;
+std::map<std::shared_ptr<iS2ROS::Device>,
+         std::vector<std::shared_ptr<iS2ROS::Capability>>>
+    device_to_caps;
 
 std::map<std::shared_ptr<iS2ROS::Capability>,
          std::shared_ptr<iS2ROS::KGraphNode>>
@@ -57,20 +58,28 @@ int main(int argc, char **argv) {
 
   std::shared_ptr<iS2ROS::Capability> img_cap =
       std::make_shared<iS2ROS::Capability>("Image", nullptr);
-  iS2ROS::get_root_node()->add_child(
-      std::make_shared<iS2ROS::KGraphNode>(1, img_cap));
+  auto node1 = std::make_shared<iS2ROS::KGraphNode>(1, img_cap);
+  iS2ROS::get_root_node()->add_child(node1);
+  cap_to_node[img_cap] = node1;
 
   std::shared_ptr<iS2ROS::Capability> cap1 =
       std::make_shared<iS2ROS::Capability>(
           "Color Camera Image(low res, heat resistance)", cam1);
-  iS2ROS::get_root_node()->children[0]->add_child(
-      std::make_shared<iS2ROS::KGraphNode>(2, cap1));
+
+  auto node2 = std::make_shared<iS2ROS::KGraphNode>(2, cap1);
+  iS2ROS::get_root_node()->children[0]->add_child(node2);
+  cap_to_node[cap1] = node2;
 
   std::shared_ptr<iS2ROS::Capability> cap2 =
       std::make_shared<iS2ROS::Capability>(
           "Color Camera Image(high res, heat vulnerable)", cam2);
-  iS2ROS::get_root_node()->children[0]->add_child(
-      std::make_shared<iS2ROS::KGraphNode>(3, cap2));
+  auto node3 = std::make_shared<iS2ROS::KGraphNode>(3, cap2);
+  iS2ROS::get_root_node()->children[0]->add_child(node3);
+  cap_to_node[cap2] = node3;
+
+  // update device to cap map
+  device_to_caps[cam1].push_back(cap1);
+  device_to_caps[cam2].push_back(cap2);
 
   iS2ROS::get_root_node()->print();
 

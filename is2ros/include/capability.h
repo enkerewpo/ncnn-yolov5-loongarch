@@ -85,6 +85,7 @@ class Capability : public std::enable_shared_from_this<Capability> {
 public:
   std::string name;
   double access_score; // capability's score accessed by access module
+  double threshold;    // capability's threshold accessed by select module
   std::shared_ptr<Device> device;
 
   Capability(std::string _name, std::shared_ptr<Device> _device) {

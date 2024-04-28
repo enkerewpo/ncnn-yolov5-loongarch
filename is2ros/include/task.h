@@ -28,5 +28,6 @@ struct TaskResult {
 std::vector<std::shared_ptr<Task>> get_tasks();
 void add_task(std::shared_ptr<Task> task);
 TaskResult run(int task_id);
+std::shared_ptr<Task> get_task_by_id(int task_id);
 
 } // namespace iS2ROS
