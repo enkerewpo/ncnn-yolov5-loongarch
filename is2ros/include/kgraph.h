@@ -16,7 +16,7 @@ namespace iS2ROS {
 class KGraphNode : public std::enable_shared_from_this<KGraphNode> {
 public:
   int node_id;
-  std::shared_ptr<iS2ROS::Capability> cap;
+  std::shared_ptr<Capability> cap;
   std::shared_ptr<KGraphNode> parent;
   std::vector<std::shared_ptr<KGraphNode>> children;
 
@@ -64,9 +64,26 @@ public:
     }
   }
 
+  std::vector<std::shared_ptr<Capability>> get_all_atomic_cap_nodes() {
+    // only return leaf nodes
+    std::vector<std::shared_ptr<Capability>> vec;
+    if (children.size() == 0) {
+      vec.push_back(cap);
+    } else {
+      for (auto child : children) {
+        auto child_vec = child->get_all_atomic_cap_nodes();
+        vec.insert(vec.end(), child_vec.begin(), child_vec.end());
+      }
+    }
+    return vec;
+  }
+
   void print() { pretty_print(0); }
 };
 
 void kgraph_init();
 std::shared_ptr<KGraphNode> get_root_node();
+std::shared_ptr<KGraphNode> get_node_by_cap_name(std::string cap_name);
+bool is_ancestor(std::shared_ptr<KGraphNode> ancestor,
+                 std::shared_ptr<KGraphNode> node);
 } // namespace iS2ROS

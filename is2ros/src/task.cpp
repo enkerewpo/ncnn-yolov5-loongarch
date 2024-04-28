@@ -1,5 +1,9 @@
 #include "task.h"
+#include "assess.h"
+#include "kgraph.h"
 #include "loguru.hpp"
+#include "select.h"
+#include "simulate.h"
 
 namespace iS2ROS {
 
@@ -21,10 +25,16 @@ TaskResult run(int task_id) {
   // 1. Observe
   // the environment simulator is running in a separate thread
   // updated every 0.5 seconds
+  // no need to do anything here
 
   // 2. Orient
   // sample the environment simulator to get the latest env data
   // use this data to update the knowledge graph
+
+  auto env = get_env();
+  // iterate all nodes on the knowledge graph
+  auto vec = get_root_node()->get_all_atomic_cap_nodes();
+  assess(vec, env);
 
   // 3. Decide
   // find the best match for this task added by user

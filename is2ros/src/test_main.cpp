@@ -1,14 +1,33 @@
 #include "capability.h"
 #include "core.h"
 #include "kgraph.h"
+#include "loguru.hpp"
 #include "simulate.h"
 #include "task.h"
 
-#include "loguru.hpp"
+#include <chrono>
+#include <map>
+
+std::map<std::shared_ptr<iS2ROS::Device>, std::shared_ptr<iS2ROS::Capability>>
+    device_to_cap;
+
+std::map<std::shared_ptr<iS2ROS::Capability>,
+         std::shared_ptr<iS2ROS::KGraphNode>>
+    cap_to_node;
 
 int main(int argc, char **argv) {
   // init log system
   loguru::g_stderr_verbosity = 1;
+  // bool g_preamble_date    = true; // The date field
+  // bool g_preamble_time    = true; // The time of the current day
+  // bool g_preamble_uptime  = true; // The time since init call
+  // bool g_preamble_thread  = true; // The logging thread
+  // bool g_preamble_file    = true; // The file from which the log originates
+  // from bool g_preamble_verbose = true; // The verbosity field bool
+  // g_preamble_pipe    = true; // The pipe symbol right before the message
+  loguru::g_preamble_date = false;
+  loguru::g_preamble_time = false;
+  loguru::g_preamble_file = false;
   loguru::init(argc, argv);
   loguru::add_file("is2ros.log", loguru::Append, loguru::Verbosity_MAX);
 
@@ -24,18 +43,16 @@ int main(int argc, char **argv) {
 
   // first create two devices (1 UAV, 2 cams)
 
-#define DEVICE_CAM_COLOR 1
-#define DEVICE_CAM_IR 2
+  std::shared_ptr<iS2ROS::Device> cam1 =
+      std::make_shared<iS2ROS::ColorCameraType1>(1, 0.5, 640, 480);
 
-  std::shared_ptr<iS2ROS::Device> uav_dev_color_cam =
-      std::make_shared<iS2ROS::Device>(1, DEVICE_CAM_COLOR, 10.0);
-  std::shared_ptr<iS2ROS::Device> cam_dev_IR_cam =
-      std::make_shared<iS2ROS::Device>(2, DEVICE_CAM_IR, 50.0);
+  std::shared_ptr<iS2ROS::Device> cam2 =
+      std::make_shared<iS2ROS::ColorCameraType2>(2, 0.5, 1920, 1080);
 
   /**
    * Image Cap
    *      -> Color Camera Image Cap -> Device 1
-   *      -> IR Camera Image Cap -> Device 2
+   *      -> Color Camera Image Cap -> Device 2
    */
 
   std::shared_ptr<iS2ROS::Capability> img_cap =
@@ -43,16 +60,17 @@ int main(int argc, char **argv) {
   iS2ROS::get_root_node()->add_child(
       std::make_shared<iS2ROS::KGraphNode>(1, img_cap));
 
-  std::shared_ptr<iS2ROS::Capability> color_cam_img_cap =
-      std::make_shared<iS2ROS::Capability>("Color Camera Image",
-                                           uav_dev_color_cam);
+  std::shared_ptr<iS2ROS::Capability> cap1 =
+      std::make_shared<iS2ROS::Capability>(
+          "Color Camera Image(low res, heat resistance)", cam1);
   iS2ROS::get_root_node()->children[0]->add_child(
-      std::make_shared<iS2ROS::KGraphNode>(2, color_cam_img_cap));
+      std::make_shared<iS2ROS::KGraphNode>(2, cap1));
 
-  std::shared_ptr<iS2ROS::Capability> IR_cam_img_cap =
-      std::make_shared<iS2ROS::Capability>("IR Camera Image", cam_dev_IR_cam);
+  std::shared_ptr<iS2ROS::Capability> cap2 =
+      std::make_shared<iS2ROS::Capability>(
+          "Color Camera Image(high res, heat vulnerable)", cam2);
   iS2ROS::get_root_node()->children[0]->add_child(
-      std::make_shared<iS2ROS::KGraphNode>(3, IR_cam_img_cap));
+      std::make_shared<iS2ROS::KGraphNode>(3, cap2));
 
   iS2ROS::get_root_node()->print();
 

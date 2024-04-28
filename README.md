@@ -11,8 +11,11 @@ run build.sh to build
 ## user case design
 
 1. wildlife recognition using yolov5
-2. 1 UAV, 2 cams(normal color cam and IR cam)
-3. 
+2. 1 UAV, 2 cams(2 color cam with different resolution and heat resistance)
+
+## wildlife recognition dataset
+
+https://www.kaggle.com/datasets/iamsouravbanerjee/animal-image-dataset-90-different-animals/data
 
 wheatfox
 2023 - 2024
