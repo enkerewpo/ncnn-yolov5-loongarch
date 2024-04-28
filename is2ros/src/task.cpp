@@ -80,6 +80,11 @@ TaskResult run(int task_id) {
   TaskResult result;
   result.task_id = task_id;
   result.result = "success";
+  for (auto device : devices) {
+    result.device_ids.push_back(device->device_id);
+    result.img_paths.push_back("/home/wheatfox/code/ncnn-yolov5-"
+                               "loongarch/images/0f61069510.jpg");
+  }
   return result;
 }
 

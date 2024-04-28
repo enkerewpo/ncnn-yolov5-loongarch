@@ -4,9 +4,16 @@
 #include "loguru.hpp"
 #include "simulate.h"
 #include "task.h"
+#include "yolo.h"
 
 #include <chrono>
 #include <map>
+#include <memory>
+#include <mutex>
+#include <queue>
+#include <string>
+#include <thread>
+#include <vector>
 
 std::map<std::shared_ptr<iS2ROS::Device>,
          std::vector<std::shared_ptr<iS2ROS::Capability>>>
@@ -15,6 +22,9 @@ std::map<std::shared_ptr<iS2ROS::Device>,
 std::map<std::shared_ptr<iS2ROS::Capability>,
          std::shared_ptr<iS2ROS::KGraphNode>>
     cap_to_node;
+
+std::vector<std::shared_ptr<iS2ROS::TaskResult>> task_results;
+std::mutex task_results_mutex;
 
 int main(int argc, char **argv) {
   // init log system
@@ -85,12 +95,41 @@ int main(int argc, char **argv) {
 
   LOG_F(INFO, "Finished adding Knowledge Graph nodes");
 
+  // start a new thread for yolov5 to process images
+
+  std::thread t1([]() {
+    int processed_count = 0;
+    std::queue<std::string> img_paths_queue;
+    while (1) {
+      // everytime a new image is added in task result vector, run yolov5 on it
+      task_results_mutex.lock();
+      if (task_results.size() > processed_count) {
+        LOG_F(INFO, "New task result added, processing...");
+        auto task_result = task_results[processed_count];
+        for (auto img_path : task_result->img_paths) {
+          img_paths_queue.push(img_path);
+          LOG_F(INFO, "New image added to queue: %s", img_path.c_str());
+        }
+      }
+      processed_count = task_results.size();
+      task_results_mutex.unlock();
+      while (!img_paths_queue.empty()) {
+        auto img_path = img_paths_queue.front();
+        img_paths_queue.pop();
+        run((char *)img_path.c_str());
+      }
+    }
+  });
+
   while (1) {
     iS2ROS::add_task(std::make_shared<iS2ROS::Task>(1, "Image", 75.0));
     auto result = iS2ROS::run(1);
     if (result.result == "success") {
       LOG_F(INFO, "Task %d succeeded", result.task_id);
     }
+    task_results_mutex.lock();
+    task_results.push_back(std::make_shared<iS2ROS::TaskResult>(result));
+    task_results_mutex.unlock();
     // sleep 2s
     std::this_thread::sleep_for(std::chrono::seconds(2));
   }

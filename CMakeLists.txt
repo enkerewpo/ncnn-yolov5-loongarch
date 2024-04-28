@@ -12,6 +12,7 @@ set(SOURCE_FILES
     ./is2ros/src/test_main.cpp
     ./is2ros/src/assess.cpp
     ./is2ros/src/select.cpp
+    ./is2ros/src/yolo.cpp
 )
 
 # set gcc compile flags

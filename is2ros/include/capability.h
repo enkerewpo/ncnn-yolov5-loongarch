@@ -6,8 +6,8 @@
 
 namespace iS2ROS {
 
-#define DEVICE_CAM_COLOR 1
-#define DEVICE_CAM_IR 2
+#define DEVICE_CAM_COLOR_TYPE1 1
+#define DEVICE_CAM_COLOR_TYPE2 2
 
 class Capability;
 
@@ -37,6 +37,24 @@ public:
   // add comparable < for device_id
   bool operator<(const Device &d) const { return device_id < d.device_id; }
 
+  std::string get_device_type_str() {
+    if (device_type == DEVICE_CAM_COLOR_TYPE1) {
+      return "CAM_COLOR_TYPE1";
+    } else if (device_type == DEVICE_CAM_COLOR_TYPE2) {
+      return "CAM_COLOR_TYPE2";
+    } else {
+      return "UNKNOWN";
+    }
+  }
+
+  std::string to_string() {
+    return "Device ID: " + std::to_string(device_id) +
+           ", Device Type: " + get_device_type_str() +
+           ", Power Consumption: " + std::to_string(power_consumption) +
+           ", Resolution: " + std::to_string(res_x) + "x" +
+           std::to_string(res_y);
+  }
+
   virtual double get_noise_level_by_temp(double temperture) = 0;
 };
 
@@ -46,7 +64,7 @@ class ColorCameraType1 : public Device {
 public:
   ColorCameraType1(int _device_id, double _power_consumption, double _res_x,
                    double _res_y)
-      : Device(_device_id, DEVICE_CAM_COLOR, _power_consumption, _res_x,
+      : Device(_device_id, DEVICE_CAM_COLOR_TYPE1, _power_consumption, _res_x,
                _res_y) {}
 
   double get_noise_level_by_temp(double temperture) override {
@@ -63,7 +81,7 @@ class ColorCameraType2 : public Device {
 public:
   ColorCameraType2(int _device_id, double _power_consumption, double _res_x,
                    double _res_y)
-      : Device(_device_id, DEVICE_CAM_COLOR, _power_consumption, _res_x,
+      : Device(_device_id, DEVICE_CAM_COLOR_TYPE2, _power_consumption, _res_x,
                _res_y) {}
 
   double get_noise_level_by_temp(double temperture) override {

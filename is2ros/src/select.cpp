@@ -155,7 +155,8 @@ select(std::vector<std::shared_ptr<Capability>> caps_need,
   LOG_F(INFO, "[END MATCH]");
 
   for (auto d : devices) {
-    LOG_F(INFO, "Selected device %d", d->device_id);
+    LOG_F(INFO, "Selected device %d, [%s]", d->device_id,
+          d->to_string().c_str());
   }
 
   return devices;
