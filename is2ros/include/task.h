@@ -18,11 +18,16 @@ public:
   }
 };
 
+class Device;
+
 struct TaskResult {
   int task_id;
+  std::string emulated_time;
+  std::string emulated_temperature;
   std::string result;
   std::vector<std::string> img_paths; // corresponding to the device_ids
   std::vector<int> device_ids;
+  std::vector<std::shared_ptr<Device>> devices;
 };
 
 std::vector<std::shared_ptr<Task>> get_tasks();

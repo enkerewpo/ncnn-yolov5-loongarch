@@ -68,8 +68,8 @@ public:
                _res_y) {}
 
   double get_noise_level_by_temp(double temperture) override {
-    // a linear relation from [0, 50] to [1%, 10%]
-    double k = (0.1 - 0.01) / 50;
+    // a linear relation from [0, 30] to [1%, 10%]
+    double k = (0.1 - 0.01) / 30;
     double b = 0.01;
     return k * temperture + b;
   }
@@ -85,12 +85,12 @@ public:
                _res_y) {}
 
   double get_noise_level_by_temp(double temperture) override {
-    // f(x) = 0.0005 (x >= 0, x <= 25)
-    // f(x) = 0.16(x - 25) (x > 25, x <= 30)
-    if (temperture <= 25) {
+    if (temperture <= 20) {
       return 0.0005 * temperture;
-    } else if (temperture <= 50) {
-      return 0.16 * (temperture - 25) + 0.0005 * 25;
+    } else if (temperture <= 30) {
+      double t = 0.16 * (temperture - 15) + 0.0005 * 15;
+      t = std::min(t, 1.0);
+      return t;
     } else {
       return 1;
     }

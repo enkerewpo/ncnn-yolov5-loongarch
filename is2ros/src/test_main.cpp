@@ -7,6 +7,7 @@
 #include "yolo.h"
 
 #include <chrono>
+#include <fstream>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -25,6 +26,8 @@ std::map<std::shared_ptr<iS2ROS::Capability>,
 
 std::vector<std::shared_ptr<iS2ROS::TaskResult>> task_results;
 std::mutex task_results_mutex;
+
+std::ofstream task_result_output("task_result_output.txt");
 
 int main(int argc, char **argv) {
   // init log system
@@ -127,6 +130,24 @@ int main(int argc, char **argv) {
     if (result.result == "success") {
       LOG_F(INFO, "Task %d succeeded", result.task_id);
     }
+    if (result.result == "failure") {
+      LOG_F(INFO, "Task %d failed", result.task_id);
+    }
+    // dump task result to file
+    task_result_output << "Task ID: " << result.task_id
+                       << " Result: " << result.result
+                       << " Emulated Time: " << result.emulated_time
+                       << " Emulated Temperature: "
+                       << result.emulated_temperature
+                       << " Selected Sensor(s): " << std::endl;
+    for (auto d : result.devices) {
+      task_result_output << d->to_string() << " ";
+    }
+    task_result_output << std::endl;
+    for (auto img_path : result.img_paths) {
+      task_result_output << img_path << " ";
+    }
+    task_result_output << std::endl;
     task_results_mutex.lock();
     task_results.push_back(std::make_shared<iS2ROS::TaskResult>(result));
     task_results_mutex.unlock();

@@ -80,10 +80,19 @@ TaskResult run(int task_id) {
   TaskResult result;
   result.task_id = task_id;
   result.result = "success";
+  result.emulated_time = env->get_datetime();
+  double temp = env->temperature;
+  result.emulated_temperature = std::to_string(env->temperature) + "℃";
   for (auto device : devices) {
     result.device_ids.push_back(device->device_id);
-    result.img_paths.push_back("/home/wheatfox/code/ncnn-yolov5-"
-                               "loongarch/images/0f61069510.jpg");
+    result.devices.push_back(device);
+    double noise_level = device->get_noise_level_by_temp(temp);
+    LOG_F(INFO, "Noise level: %f", noise_level);
+    int level = std::round(noise_level * 100);
+    auto path = "images/bear1_cam" + std::to_string(device->device_id) +
+                "_noise_" + std::to_string(level) + ".jpg";
+    LOG_F(INFO, "Image path: %s", path.c_str());
+    result.img_paths.push_back(path);
   }
   return result;
 }

@@ -16,7 +16,7 @@ set(SOURCE_FILES
 )
 
 # set gcc compile flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -static -msimd=lsx -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -static -msimd=lsx -Os")
 
 include_directories(
     ./include/ncnn
