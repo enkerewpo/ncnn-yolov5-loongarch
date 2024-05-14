@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <vector>
 
+#include <fstream>
+
 #define MAX_STRIDE 32 // if yolov5-p6 model modify to 64
 
 struct Object {
@@ -14,6 +16,8 @@ struct Object {
   int label;
   float prob;
 };
+
+int run_id = 0;
 
 static void generate_proposals(const ncnn::Mat &anchors, const int stride,
                                const ncnn::Mat &feat_blob,
@@ -313,6 +317,20 @@ static void draw_objects(const cv::Mat &bgr,
     char text[256];
     sprintf(text, "%s %.1f%%", class_names[obj.label], obj.prob * 100);
 
+    // write detect result to yolo_result_output.txt
+    // RUN ID: {run_id}
+    // RESULT: {class_names[obj.label]} {obj.prob * 100}%, {obj.rect.x},
+    // {obj.rect.y}, {obj.rect.width}, {obj.rect.height}
+
+    std::ofstream yolo_result_output;
+    yolo_result_output.open("yolo_result_output.txt", std::ios_base::app);
+    yolo_result_output << "RUN ID: " << run_id << std::endl;
+    yolo_result_output << "RESULT: " << class_names[obj.label] << " "
+                       << obj.prob * 100 << "%, " << obj.rect.x << ", "
+                       << obj.rect.y << ", " << obj.rect.width << ", "
+                       << obj.rect.height << std::endl;
+    yolo_result_output.close();
+
     int baseLine = 0;
     cv::Size label_size =
         cv::getTextSize(text, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseLine);
@@ -365,7 +383,7 @@ static void draw_objects(const cv::Mat &bgr,
 // }
 
 int run(char *imagepath) {
-  printf("loongarch64-yolov4 test program\n");
+  // printf("loongarch64-yolov4 test program\n");
 
   cv::Mat m = cv::imread(imagepath, 1);
   if (m.empty()) {
@@ -377,6 +395,8 @@ int run(char *imagepath) {
   detect_yolov5(m, objects);
 
   draw_objects(m, objects);
+
+  run_id++;
 
   return 0;
 }

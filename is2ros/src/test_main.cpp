@@ -58,10 +58,10 @@ int main(int argc, char **argv) {
   // first create two devices (1 UAV, 2 cams)
 
   std::shared_ptr<iS2ROS::Device> cam1 =
-      std::make_shared<iS2ROS::ColorCameraType1>(1, 0.5, 640, 480);
+      std::make_shared<iS2ROS::ColorCameraType1>(1, 0.5, 320, 240);
 
   std::shared_ptr<iS2ROS::Device> cam2 =
-      std::make_shared<iS2ROS::ColorCameraType2>(2, 0.5, 1920, 1080);
+      std::make_shared<iS2ROS::ColorCameraType2>(2, 0.5, 640, 480);
 
   /**
    * Image Cap

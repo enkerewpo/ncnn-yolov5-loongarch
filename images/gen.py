@@ -78,8 +78,8 @@ input_img_bear1 = cv2.imread('bear1.jpg')
 
 # resize to 1920x1080 and 640x480
 
-output_img_bear1_1920x1080 = cv2.resize(input_img_bear1, (1920, 1080))
-output_img_bear1_640x480 = cv2.resize(input_img_bear1, (640, 480))
+output_img_bear1_1920x1080 = cv2.resize(input_img_bear1, (640, 480))
+output_img_bear1_640x480 = cv2.resize(input_img_bear1, (320, 240))
 
 cv2.imwrite('bear1_cam1.jpg', output_img_bear1_1920x1080)
 cv2.imwrite('bear1_cam2.jpg', output_img_bear1_640x480)
@@ -87,7 +87,7 @@ cv2.imwrite('bear1_cam2.jpg', output_img_bear1_640x480)
 # then generate images with noise level 0 - 100, simulate ISO noise in digital camera
 # both for 1920x1080 and 640x480, cam1 and cam2
 
-for noise_level in range(0, 101):
+for noise_level in range(0, 101, 1):
     noise_img_bear1_1920x1080 = add_gaussian_noise(output_img_bear1_1920x1080, sigma=noise_level)
     noise_img_bear1_640x480 = add_gaussian_noise(output_img_bear1_640x480, sigma=noise_level)
     
