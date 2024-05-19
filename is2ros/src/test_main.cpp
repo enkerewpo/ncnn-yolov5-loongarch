@@ -125,6 +125,10 @@ int main(int argc, char **argv) {
   });
 
   while (1) {
+    if (iS2ROS::get_env()->ended) {
+      LOG_F(INFO, "EnvSimulator ended, exiting...");
+      break;
+    }
     iS2ROS::add_task(std::make_shared<iS2ROS::Task>(1, "Image", 75.0));
     auto result = iS2ROS::run(1);
     if (result.result == "success") {
@@ -154,6 +158,12 @@ int main(int argc, char **argv) {
     // sleep 2s
     std::this_thread::sleep_for(std::chrono::seconds(2));
   }
+
+  // join threads of yolov5
+  std::cout << "Waiting for yolov5 thread to finish..." << std::endl;
+  t1.join();
+
+  std::cout << "Exiting..." << std::endl;
 
   return 0;
 }

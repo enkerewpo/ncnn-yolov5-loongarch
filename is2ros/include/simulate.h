@@ -21,8 +21,10 @@ public:
   std::mutex env_lock;
 
   std::thread t;
-  double timer_end = 300; // total emulated time(seconds)
+  double timer_end = 50; // total emulated time(seconds)
   double INTERVAL = 2;
+
+  bool ended;
 
   // update env every INTERVAL seconds
   // from 8AM in the morning to 6PM in the even ing
@@ -36,11 +38,13 @@ public:
                      std::chrono::system_clock::now().time_since_epoch())
                      .count();
     emulated_hour = 8;
+    ended = false;
     t = std::thread([this] {
       while (true) {
         auto time = get_timestamp();
         if (time > timer_end) {
           LOG_F(INFO, "EnvSimulator: timer ended");
+          ended = true;
           break;
         }
         if (emulated_hour >= 18) {
